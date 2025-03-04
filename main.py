@@ -16,7 +16,7 @@ else:
     # 🔹 Add Logout Button at the Top Right
     col1, col2 = st.columns([9, 1])
     with col2:
-        if st.button("🚪 Logout", key="logout_main"):
+        if st.button("Logout", key="logout_main"):
             st.session_state["user_role"] = None
             st.session_state["username"] = None
             st.rerun()

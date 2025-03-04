@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def login():
-    """Professional Hospital-Style Login Page"""
+    """Hospital-Style Login Page"""
     st.markdown(
         """
         <style>
@@ -40,7 +40,7 @@ def login():
         with st.container():
             col1, col2 = st.columns([9, 1])
             with col2:
-                if st.button("🚪 Logout", key="logout"):
+                if st.button("Logout", key="logout"):
                     st.session_state["user_role"] = None
                     st.session_state["username"] = None
                     st.rerun()
