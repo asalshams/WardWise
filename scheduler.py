@@ -7,27 +7,25 @@ def schedule():
     """ WardWise Interactive Shift Calendar with Real-Time View Switching """
     st.title("📅 WardWise Interactive Shift Calendar")
 
-    # Sidebar for View Options
-    st.sidebar.title("📌 Calendar Options")
-
-    # Initialize session state for calendar view
+    # ✅ Ensure session state variable is initialized BEFORE using it
     if "calendar_view" not in st.session_state:
-        st.session_state.calendar_view = "dayGridMonth"  # Default to Month View
+        st.session_state["calendar_view"] = "dayGridMonth"  # Default to Month View
 
-    # View Selection with Buttons
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("📅 Month View"):
-            st.session_state.calendar_view = "dayGridMonth"
-            st.rerun()
-    with col2:
-        if st.button("🗓️ Week View"):
-            st.session_state.calendar_view = "timeGridWeek"
-            st.rerun()
-    with col3:
-        if st.button("📆 Day View"):
-            st.session_state.calendar_view = "timeGridDay"
-            st.rerun()
+    # Sidebar for View Options (Hover Effect)
+    with st.sidebar.expander("📌 **Calendar Options**", expanded=False):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("📅 Month View"):
+                st.session_state["calendar_view"] = "dayGridMonth"
+                st.rerun()
+        with col2:
+            if st.button("🗓️ Week View"):
+                st.session_state["calendar_view"] = "timeGridWeek"
+                st.rerun()
+        with col3:
+            if st.button("📆 Day View"):
+                st.session_state["calendar_view"] = "timeGridDay"
+                st.rerun()
 
     # Sample shifts with proper times & colors
     staff_members = ["Dr. Smith", "Dr. Patel", "Dr. Chen", "Dr. Ali", "Dr. O'Connor"]
@@ -53,7 +51,7 @@ def schedule():
                 "end": f"{shift_date.strftime('%Y-%m-%d')}T{end_time}:00",
                 "backgroundColor": shift_color,  # Assign correct color
                 "borderColor": "#ffffff",  # White border for clarity
-                "display": "block",  # Ensures block styling
+                "display": "block",  # Ensures block styling instead of dots
             })
 
     # Calendar Configuration (Dynamically Updates View)
@@ -82,8 +80,8 @@ def schedule():
         st.write(f"🕒 **End Time:** {event_data['end'][11:16]}")
         st.write(f"🎨 **Shift Color:** `{event_data['backgroundColor']}`")
 
-    # **Legend for Shift Colors**
-    st.sidebar.markdown("### 🔹 Shift Color Legend")
-    st.sidebar.markdown("<span style='color:#28a745; font-weight:bold;'>🟢 Morning (08:00 - 16:00)</span>", unsafe_allow_html=True)
-    st.sidebar.markdown("<span style='color:#007bff; font-weight:bold;'>🔵 Afternoon (14:00 - 22:00)</span>", unsafe_allow_html=True)
-    st.sidebar.markdown("<span style='color:#dc3545; font-weight:bold;'>🔴 Night (22:00 - 23:59)</span>", unsafe_allow_html=True)
+    # **Hoverable Shift Color Legend**
+    with st.sidebar.expander("🔹 **Shift Color Legend**", expanded=False):
+        st.markdown("<span style='color:#28a745; font-weight:bold;'>🟢 Morning (08:00 - 16:00)</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:#007bff; font-weight:bold;'>🔵 Afternoon (14:00 - 22:00)</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:#dc3545; font-weight:bold;'>🔴 Night (22:00 - 23:59)</span>", unsafe_allow_html=True)
