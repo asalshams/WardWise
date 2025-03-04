@@ -31,19 +31,30 @@ def schedule():
 
     # Sample shifts
     staff_members = ["Dr. Smith", "Dr. Patel", "Dr. Chen", "Dr. Ali", "Dr. O'Connor"]
-    shifts = ["Morning", "Afternoon", "Night"]
+    shifts = [
+        ("Morning", "08:00", "16:00"),
+        ("Afternoon", "14:00", "22:00"),
+        ("Night", "22:00", "23:59")  # Ends at 11:59PM to stay within the same day
+    ]
 
-    # Generate dummy event data for doctors' shifts
+    # Generate more dummy shifts per day
     events = []
-    for _ in range(15):  # Create 15 random shifts
-        date = datetime.today() + timedelta(days=random.randint(1, 30))  # Next 30 days
-        events.append({
-            "title": f"{random.choice(staff_members)} - {random.choice(shifts)}",
-            "start": date.strftime("%Y-%m-%dT%H:%M:%S"),
-            "end": (date + timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%S"),  # 8-hour shift
-            "backgroundColor": random.choice(["#007bff", "#28a745", "#dc3545"]),  # Blue, Green, Red
-            "borderColor": random.choice(["#007bff", "#28a745", "#dc3545"]),
-        })
+    for day_offset in range(1, 30):  # Next 30 days
+        shift_date = datetime.today() + timedelta(days=day_offset)
+        num_shifts = random.randint(3, 6)  # Each day gets 3-6 shifts
+
+        for _ in range(num_shifts):
+            doctor = random.choice(staff_members)
+            shift_name, start_time, end_time = random.choice(shifts)
+
+            events.append({
+                "title": f"{doctor} - {shift_name}",
+                "start": f"{shift_date.strftime('%Y-%m-%d')}T{start_time}:00",
+                "end": f"{shift_date.strftime('%Y-%m-%d')}T{end_time}:00",
+                "backgroundColor": random.choice(["#007bff", "#28a745", "#dc3545"]),  # Blue, Green, Red
+                "borderColor": "#ffffff",  # White border for clarity
+                "display": "block",  # Ensures full block styling instead of dots
+            })
 
     # Calendar Configuration (Dynamically Updates View)
     calendar_options = {
@@ -54,14 +65,15 @@ def schedule():
         "headerToolbar": {
             "left": "today prev,next",
             "center": "title",
-            "right": "dayGridMonth,timeGridWeek,timeGridDay"  # Buttons for Month, Week, Day
+            "right": "dayGridMonth,timeGridWeek,timeGridDay"
         },
+        "eventDisplay": "block",  # Forces full block styling instead of dots
     }
 
     # Show the interactive calendar
     selected_event = st_calendar(events=events, options=calendar_options, key=f"calendar-{st.session_state.calendar_view}")
 
-    # **Clean Shift Selection Display**
+    # **Display Selected Shift Details**
     if selected_event and "eventClick" in selected_event:
         event_data = selected_event["eventClick"]["event"]
         st.success(f"📌 **Shift Selected:** {event_data['title']}")
