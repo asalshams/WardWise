@@ -29,15 +29,15 @@ def schedule():
             st.session_state.calendar_view = "timeGridDay"
             st.rerun()
 
-    # Sample shifts
+    # Sample shifts with proper times & colors
     staff_members = ["Dr. Smith", "Dr. Patel", "Dr. Chen", "Dr. Ali", "Dr. O'Connor"]
     shifts = [
-        ("Morning", "08:00", "16:00"),
-        ("Afternoon", "14:00", "22:00"),
-        ("Night", "22:00", "23:59")  # Ends at 11:59PM to stay within the same day
+        ("Morning", "08:00", "16:00", "#28a745"),  # 🟢 Green
+        ("Afternoon", "14:00", "22:00", "#007bff"),  # 🔵 Blue
+        ("Night", "22:00", "23:59", "#dc3545")  # 🔴 Red (Ends at 11:59PM)
     ]
 
-    # Generate more dummy shifts per day
+    # Generate shifts per day with correct colors
     events = []
     for day_offset in range(1, 30):  # Next 30 days
         shift_date = datetime.today() + timedelta(days=day_offset)
@@ -45,15 +45,15 @@ def schedule():
 
         for _ in range(num_shifts):
             doctor = random.choice(staff_members)
-            shift_name, start_time, end_time = random.choice(shifts)
+            shift_name, start_time, end_time, shift_color = random.choice(shifts)
 
             events.append({
                 "title": f"{doctor} - {shift_name}",
                 "start": f"{shift_date.strftime('%Y-%m-%d')}T{start_time}:00",
                 "end": f"{shift_date.strftime('%Y-%m-%d')}T{end_time}:00",
-                "backgroundColor": random.choice(["#007bff", "#28a745", "#dc3545"]),  # Blue, Green, Red
+                "backgroundColor": shift_color,  # Assign correct color
                 "borderColor": "#ffffff",  # White border for clarity
-                "display": "block",  # Ensures full block styling instead of dots
+                "display": "block",  # Ensures block styling
             })
 
     # Calendar Configuration (Dynamically Updates View)
@@ -81,3 +81,9 @@ def schedule():
         st.write(f"🕒 **Start Time:** {event_data['start'][11:16]}")
         st.write(f"🕒 **End Time:** {event_data['end'][11:16]}")
         st.write(f"🎨 **Shift Color:** `{event_data['backgroundColor']}`")
+
+    # **Legend for Shift Colors**
+    st.sidebar.markdown("### 🔹 Shift Color Legend")
+    st.sidebar.markdown("<span style='color:#28a745; font-weight:bold;'>🟢 Morning (08:00 - 16:00)</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("<span style='color:#007bff; font-weight:bold;'>🔵 Afternoon (14:00 - 22:00)</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("<span style='color:#dc3545; font-weight:bold;'>🔴 Night (22:00 - 23:59)</span>", unsafe_allow_html=True)
