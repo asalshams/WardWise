@@ -58,11 +58,14 @@ def login():
         username = st.text_input("👤 Username", help="Enter your hospital username.")
         password = st.text_input("🔒 Password", type="password", help="Enter your password.")
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button("🩺 Login as Doctor", use_container_width=True):
+            if st.button("🥼 Login as Doctor", use_container_width=True):
                 authenticate_user(username, password, "Doctor")
         with col2:
+            if st.button("🩺 Login as Nurse", use_container_width=True):
+                authenticate_user(username, password, "Nurse")
+        with col3:
             if st.button("🏢 Login as Shift Manager", use_container_width=True):
                 authenticate_user(username, password, "Shift Manager")
 
